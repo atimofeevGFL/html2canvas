@@ -327,6 +327,12 @@ NodeParser.prototype.paintNode = function(container) {
 NodeParser.prototype.paintElement = function(container) {
     var bounds = container.parseBounds();
     this.renderer.clip(container.backgroundClip, function() {
+        var color  = container.css('webkitTextFillColor');
+        var bgClip = container.css('backgroundClip');
+                
+        if( bgClip === 'text' && color && new Color(color).isTransparent())  {            
+            return;                    
+        }
         this.renderer.renderBackground(container, bounds, container.borders.borders.map(getWidth));
     }, this);
 
@@ -441,6 +447,8 @@ NodeParser.prototype.paintText = function(container) {
     var size = container.parent.css('fontSize');
     var family = container.parent.css('fontFamily');
     var shadows = container.parent.parseTextShadows();
+    var fillColor = container.parent.parseFillColor();
+    var color     = fillColor.color?fillColor.color:container.parent.color('color');    
 
     this.renderer.font(container.parent.color('color'), container.parent.css('fontStyle'), container.parent.css('fontVariant'), weight, size, family);
     if (shadows.length) {
@@ -453,6 +461,10 @@ NodeParser.prototype.paintText = function(container) {
     this.renderer.clip(container.parent.clip, function() {
         textList.map(this.parseTextBounds(container), this).forEach(function(bounds, index) {
             if (bounds) {
+                if(fillColor.useGradient && bounds.left !== undefined) {                    
+                    var backgroundImages = container.parent.parseBackgroundImages(); 
+                    this.renderer.textBackgroundImage(textList[index], backgroundImages, bounds);
+                } 
                 this.renderer.text(textList[index], bounds.left, bounds.bottom);
                 this.renderTextDecoration(container.parent, bounds, this.fontMetrics.getMetrics(family, size));
             }

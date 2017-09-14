@@ -83,6 +83,31 @@ Renderer.prototype.renderBackgroundImage = function(container, bounds, borderDat
     }, this);
 };
 
+Renderer.prototype.textBackgroundImage = function(text, backgroundImages, bounds) {
+    
+   backgroundImages.reverse().forEach(function(backgroundTextImage, index, arr) {                 
+       switch(backgroundTextImage.method) {
+           case "url":       
+               break;
+           case "linear-gradient":
+               var gradientImage = this.images.get(backgroundTextImage.value);
+               if (gradientImage) {
+               this.renderTextBackgroundGradient(gradientImage, bounds);                   
+                   log("OK Text gradientImage", gradientImage);
+               } else {
+                   log("Error Text loading background-image", backgroundTextImage.args[0]);
+               }
+               break;
+           case "none":
+               break;
+           default:
+               log("Unknown background-image type", backgroundTextImage.args[0]);
+       }  
+
+   }, this);
+   
+};
+
 Renderer.prototype.renderBackgroundRepeating = function(container, bounds, imageContainer, index, borderData) {
     var size = container.parseBackgroundSize(bounds, imageContainer.image, index);
     var position = container.parseBackgroundPosition(bounds, imageContainer.image, index, size);

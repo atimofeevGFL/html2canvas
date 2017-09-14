@@ -210,6 +210,31 @@ NodeContainer.prototype.parseTextShadows = function() {
     return results;
 };
 
+NodeContainer.prototype.parseFillColor = function() {
+
+    var fillColor = {
+        color:'',
+        isTransparent:false,
+        useGradient: false
+    };
+
+    var color = this.css('webkitTextFillColor');
+    var colorObj = new Color(color);    
+
+    if(fillColor) {
+        fillColor.color = color;
+    }
+    fillColor.isTransparent = colorObj.isTransparent();
+    
+    if(fillColor.isTransparent && 
+        this.css("backgroundClip") === 'text' && 
+        this.backgroundImages.length)  
+    {
+        fillColor.useGradient = true;
+    }    
+    return fillColor;
+};
+
 NodeContainer.prototype.parseTransform = function() {
     if (!this.transformData) {
         if (this.hasTransform()) {

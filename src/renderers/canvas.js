@@ -160,6 +160,21 @@ CanvasRenderer.prototype.renderBackgroundGradient = function(gradientImage, boun
     }
 };
 
+CanvasRenderer.prototype.renderTextBackgroundGradient = function(gradientImage, bounds) {
+    if (gradientImage instanceof LinearGradientContainer) {
+        var gradient = this.ctx.createLinearGradient(
+            bounds.left + bounds.width * gradientImage.x0,
+            bounds.top + bounds.height * gradientImage.y0,
+            bounds.left +  bounds.width * gradientImage.x1,
+            bounds.top +  bounds.height * gradientImage.y1);
+
+        gradientImage.colorStops.forEach(function(colorStop) {
+            gradient.addColorStop(colorStop.stop, colorStop.color.toString());
+        }); 
+        this.setFillStyle(gradient);
+    }
+};
+
 CanvasRenderer.prototype.resizeImage = function(imageContainer, size) {
     var image = imageContainer.image;
     if(image.width === size.width && image.height === size.height) {
