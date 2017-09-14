@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style> 
+    #example5{      
+      background: -webkit-linear-gradient(top, rgba(0, 0, 0, .5), #0073FF);             
+      font-size: 60px;   
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: rgba(233, 0, 0, .0);
+    }
+
+    .gradBg {
+      background: linear-gradient(to top, #fefcea, #DFC206);      
+      width: 200px;
+      height: 100px;   
+    }
+    
+
+    </style>
+
+    
+  </head>
+  <body style="background-color: burlywood">
+
+      <div id="example">
+
+        <h3 id="example5">Text with gradient </h3>        
+        <div class="gradBg">Simple gradient box </div>
+        <div>Simple text </div>
+      </div>
+
+    <div id="result"></div>
+                             
+    <script type="text/javascript" src="../dist/html2canvas.js"></script>
+    <script type="text/javascript">
+        draw();       
+        function draw() {
+          html2canvas(document.getElementById("example")).then(function(canvas) {
+            document.getElementById("result").innerHTML = '';
+            document.getElementById("result").appendChild(canvas);
+        });
+
+        }
+    </script>
+  </body>
+</html>
